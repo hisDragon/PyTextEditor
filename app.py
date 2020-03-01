@@ -29,6 +29,9 @@ class App(tk.Tk):
         # if the file is modified or not
         self.modified: bool = False
 
+        # menu check buttons
+        self.show_status_bar = tk.BooleanVar()
+
         self.text_area: tk.Text = tk.Text(master=root, font=text_font)
         self.scroll_bar: tk.Scrollbar = tk.Scrollbar(master=root, command=self.text_area.yview)
         self.text_area.configure(yscrollcommand=self.scroll_bar.set)
@@ -40,7 +43,9 @@ class App(tk.Tk):
         # creating an instance of menu bar
         # calling __init__() at this point of time because it configures other Widgets
         self.menu_bar = MenuBar(self)
-        self.status_bar = StatusBar(self)
+        self.status_bar = StatusBar(self, self.show_status_bar)
+
+        # binding keyboard buttons
         self.__bind()
 
         # __init__() END
@@ -139,6 +144,15 @@ class App(tk.Tk):
     ###################################################################################################################
 
     ###################################################################################################################
+    # view menu methods START
+
+    def show_status_bar_method(self):
+        self.status_bar.show_status_bar(self.show_status_bar)
+
+    # view menu methods END
+    ###################################################################################################################
+
+    ###################################################################################################################
     # about menu methods START
 
     @staticmethod
@@ -210,21 +224,39 @@ class MenuBar:
         about_dropdown.add_separator()
         about_dropdown.add_command(label="Version", command=App.version_info)
 
+        # drop down for 'View' menu
+        view_dropdown = tk.Menu(master=menu_bar, font=menu_font, tearoff=0)
+
+        view_dropdown.add_checkbutton(label="Toggle Status Bar", onvalue=1, offvalue=0,
+                                      variable=parent.show_status_bar, command=parent.show_status_bar_method)
+
         # adding 'File' for menu master(menu_bar)
         menu_bar.add_cascade(label="File", menu=file_dropdown)
+        menu_bar.add_cascade(label="View", menu=view_dropdown)
         menu_bar.add_cascade(label="About", menu=about_dropdown)
 
 
 class StatusBar:
-    def __init__(self, parent: App):
+    def __init__(self, parent: App, show_status_bar: tk.BooleanVar):
         status_font = Font(family="Times New Roman", size=10)
 
         self.status = tk.StringVar()
         self.status.set("PyTextEditor v1.0")
         
-        label = tk.Label(parent.text_area, textvariable=self.status, fg='black',
-                         bg='lightgrey', anchor='sw', font=status_font)
-        label.pack(side=tk.BOTTOM, fill=tk.BOTH)
+        self.label = tk.Label(parent.text_area, textvariable=self.status, fg='black',
+                              bg='lightgrey', anchor='sw', font=status_font)
+        self.label.pack(side=tk.BOTTOM, fill=tk.BOTH)
+
+        if show_status_bar.get():
+            pass
+        else:
+            self.label.pack_forget()
+
+    def show_status_bar(self, s_s_b: tk.BooleanVar):
+        if s_s_b.get():
+            self.label.pack(side=tk.BOTTOM, fill=tk.BOTH)
+        else:
+            self.label.pack_forget()
 
 
 if __name__ == '__main__':
