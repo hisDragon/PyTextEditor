@@ -10,6 +10,11 @@ This comes with a built-in **tkinter** module and *no* further installation is r
 You can Download it from [**here**](https://www.jetbrains.com/pycharm/download/).
 Here is a good Guide to Install PyCharm on Windows 10 on [Youtube](https://www.youtube.com/watch?v=SZUNUB6nz3g)
 
+#### TO-DO List
+- [x] Non-Dynamic Spell Check to the PyTextEditor.
+- [ ] Dynamic Spell Check to the PyTextEditor.
+- [ ] Advanced Status Bar - with Cursor Position.
+
 ### Use Of PyTextEditor v1.0
 This is **not** a Text Editor for Professional Use and is still under Development.
 There might still be some existing bugs and PyTextEditor has not yet been Tested.
