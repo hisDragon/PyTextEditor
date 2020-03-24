@@ -1,8 +1,9 @@
-import tkinter as tk
-from tkinter.font import Font
-import tkinter.filedialog as filedialog
-import tkinter.messagebox as messagebox
-import os
+import tkinter            as tk                        # python gui library
+from   tkinter.font       import Font                  # font
+import tkinter.filedialog as filedialog                # for saving and opening files
+import tkinter.messagebox as messagebox                # for message boxes or alerts
+import os                                              # for control of naming of files
+import spell_check                                     # spell checking thread
 
 
 # App START #
@@ -18,7 +19,7 @@ class App(tk.Tk):
         root.geometry("950x600")
 
         # filename
-        self.file_name = None  # no file name at the beginning
+        self.file_name: str = None  # no file name at the beginning
 
         # creating a class variable for master(root) to use it outside this class to instantiate other Widgets
         self.root: tk.Tk = root
@@ -26,11 +27,8 @@ class App(tk.Tk):
         # font (local variable)
         text_font: Font = Font(family="Times New Roman", size=14)
 
-        # if the file is modified or not
-        self.modified: bool = False
-
         # menu check buttons
-        self.show_status_bar = tk.BooleanVar()
+        self.show_status_bar: tk.BooleanVar = tk.BooleanVar()
 
         self.text_area: tk.Text = tk.Text(master=root, font=text_font)
         self.scroll_bar: tk.Scrollbar = tk.Scrollbar(master=root, command=self.text_area.yview)
@@ -47,6 +45,10 @@ class App(tk.Tk):
 
         # binding keyboard buttons
         self.__bind()
+
+        # starting spell checking thread
+        self.spell_check_thread = spell_check.SpellCheckThread(self)
+        self.thread_already_started = False  # to check if the thread is already started to restrain from starting again
 
         # __init__() END
 
@@ -90,7 +92,12 @@ class App(tk.Tk):
             self.text_area.delete(1.0, tk.END)
             with open(self.file_name, "r") as f:
                 self.text_area.insert(1.0, f.read())
+            # set window title
             self.window_title(self.file_name)
+            # start spell check thread
+            if not self.thread_already_started:
+                self.thread_already_started = True
+                self.spell_check_thread.start_spell_check()
 
     def save(self, *args):
         if self.file_name:
@@ -138,6 +145,7 @@ class App(tk.Tk):
             print(e)
 
     def destroy(self):
+        self.spell_check_thread.join()  # joining spell check thread before destruction
         self.root.destroy()
 
     # file menu methods END
@@ -242,7 +250,7 @@ class StatusBar:
 
         self.status = tk.StringVar()
         self.status.set("PyTextEditor v1.0")
-        
+
         self.label = tk.Label(parent.text_area, textvariable=self.status, fg='black',
                               bg='lightgrey', anchor='sw', font=status_font)
         self.label.pack(side=tk.BOTTOM, fill=tk.BOTH)
