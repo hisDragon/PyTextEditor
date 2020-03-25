@@ -1,7 +1,7 @@
-import tkinter            as tk                        # python gui library
+import tkinter            as     tk                    # python gui library
 from   tkinter.font       import Font                  # font
-import tkinter.filedialog as filedialog                # for saving and opening files
-import tkinter.messagebox as messagebox                # for message boxes or alerts
+import tkinter.filedialog as     filedialog            # for saving and opening files
+import tkinter.messagebox as     messagebox            # for message boxes or alerts
 import os                                              # for control of naming of files
 import spell_check                                     # spell checking thread
 
@@ -140,6 +140,10 @@ class App(tk.Tk):
 
             self.file_name = new_file
             self.window_title(self.file_name)
+
+            # starting spell check when new file is saved
+            if not self.thread_already_started:
+                self.spell_check_thread.start_spell_check()
 
         except Exception as e:
             print(e)
