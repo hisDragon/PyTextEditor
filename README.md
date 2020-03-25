@@ -30,7 +30,7 @@ Here is a good Guide to Install PyCharm on Windows 10 on [Youtube](https://www.y
 
 #### TO-DO List
 - [x] Non-Dynamic Spell Check to the PyTextEditor.
-- [ ] Dynamic Spell Check to the PyTextEditor.
+- [x] Dynamic Spell Check to the PyTextEditor.
 - [ ] Advanced Status Bar - with Cursor Position.
 
 ## Use Of PyTextEditor v1.0
