@@ -32,6 +32,7 @@ Here is a good Guide to Install PyCharm on Windows 10 on [Youtube](https://www.y
 - [x] Non-Dynamic Spell Check to the PyTextEditor.
 - [x] Dynamic Spell Check to the PyTextEditor.
 - [ ] Advanced Status Bar - with Cursor Position.
+- [ ] Adding suggetions for misspelled words.
 
 ## Use Of PyTextEditor v1.0
 This is **not** a Text Editor for Professional Use and is still under Development.
